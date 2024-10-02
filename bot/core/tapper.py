@@ -56,7 +56,7 @@ class Tapper:
 
                     if not start_command_found:
                         if settings.REF_ID == '':
-                            await self.tg_client.send_message("cexio_tap_bot", "/start 1717162889191233")
+                            await self.tg_client.send_message("cexio_tap_bot", "/start 1727794081959995")
                         else:
                             await self.tg_client.send_message("cexio_tap_bot", f"/start {settings.REF_ID}")
                 except (Unauthorized, UserDeactivated, AuthKeyUnregistered):
@@ -99,7 +99,7 @@ class Tapper:
 
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error during Authorization: {error}")
-            await asyncio.sleep(delay=3)
+            await asyncio.sleep(delay=5)
 
     async def startTasks(self, http_client: aiohttp.ClientSession, task_list, tg_web_data: str):
         try:
@@ -120,7 +120,7 @@ class Tapper:
             return results
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when starting tasks, {error}")
-            await asyncio.sleep(delay=3)
+            await asyncio.sleep(delay=5)
             return [error] * len(task_list)
 
     async def checkTasks(self, http_client: aiohttp.ClientSession, task_list, tg_web_data: str):
@@ -142,7 +142,7 @@ class Tapper:
             return results
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when claiming tasks, {error}")
-            await asyncio.sleep(delay=3)
+            await asyncio.sleep(delay=5)
             return [error] * len(task_list)
 
     async def claimTasks(self, http_client: aiohttp.ClientSession, task_list, tg_web_data: str):
@@ -345,8 +345,9 @@ class Tapper:
                             only_check = True
 
                         if (statuses is not None and all(statuses)) or only_check:
-                            logger.success(f'{self.session_name} | Waiting before claiming, 65 s')
-                            await asyncio.sleep(delay=65)
+                            logger.success(f'{self.session_name} | Waiting before claiming, 60-120 s')
+                            t = randint(60, 120)
+                            await asyncio.sleep(delay=t)
                             none_tasks, ready_to_check_tasks = await self.getTasks(http_client=http_client,
                                                                                    tg_web_data=tg_web_data)
                             status = await self.checkTasks(http_client=http_client, task_list=ready_to_check_tasks,
@@ -411,8 +412,9 @@ class Tapper:
                                 logger.success(f'{self.session_name} | Claimed taps, count: {rand_taps}')
                                 await asyncio.sleep(delay=2)
                     elif cooldown != 0 and available_taps == 0:
-                        logger.info(f'{self.session_name} | No taps, sleeping 1 hour')
-                        await asyncio.sleep(delay=3600)
+                        logger.info(f'{self.session_name} | No taps, sleeping 1-5 hour')
+                        t = randint(3600, 18000)
+                        await asyncio.sleep(delay=t)
 
                 except InvalidSession as error:
                     raise error
