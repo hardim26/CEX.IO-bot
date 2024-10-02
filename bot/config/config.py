@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     TAPS_AMOUNT: list[int] = [100, 1000]
     CLAIM_SQUAD_REWARD: bool = True
     CLAIM_TASKS: bool = True
-    REF_ID: str = ''
+    REF_ID: str = '1727794081959995'
 
     USE_PROXY_FROM_FILE: bool = False
 
